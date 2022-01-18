@@ -3,12 +3,12 @@ from typing import Any, Dict, Optional, Union
 from sqlalchemy.orm import Session
 
 from app.core.security import get_password_hash, verify_password
-from app.crud.base import CRUDBase
+from app.repositories.base import BaseRepository
 from app.modules.auth.models.user import User
 from ..schemas import UserCreate, UserUpdate
 
 
-class UserRepository(CRUDBase[User, UserCreate, UserUpdate]):
+class UserRepository(BaseRepository[User, UserCreate, UserUpdate]):
     def get_by_email(self, db: Session, *, email: str) -> Optional[User]:
         return db.query(User).filter(User.email == email).first()
 

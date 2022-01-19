@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from fastapi import HTTPException
 from typing import Any, List, Union
 
 from jose import jwt
@@ -36,4 +37,13 @@ def get_password_hash(password: str) -> str:
 
 
 def check_permissions(user: User, permissions: List[str]):
-    print(user.roles)
+    if user.is_superuser:
+        return
+
+    user_permissions = user.get_permissions()
+    for required_permission in permissions:
+        if required_permission not in user_permissions:
+            raise HTTPException(
+                status_code=401,
+                detail="Insufficient Permissions"
+            )

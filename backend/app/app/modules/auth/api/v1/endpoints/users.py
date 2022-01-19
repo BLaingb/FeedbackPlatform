@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from app.api import deps
 from app.core.config import settings
+from app.core.security import check_permissions
 from app.modules.auth import models, schemas, repositories
 from app.utils import send_new_account_email
 
@@ -18,11 +19,12 @@ def read_users(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
     limit: int = 100,
-    current_user: models.User = Depends(deps.get_current_active_superuser),
+    current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Retrieve users.
     """
+    check_permissions(current_user, ['user.list'])
     users = repositories.user.get_multi(db, skip=skip, limit=limit)
     return users
 
@@ -32,11 +34,12 @@ def create_user(
     *,
     db: Session = Depends(deps.get_db),
     user_in: schemas.UserCreate,
-    current_user: models.User = Depends(deps.get_current_active_superuser),
+    current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Create new user.
     """
+    check_permissions(current_user, ['user.create'])
     user = repositories.user.get_by_email(db, email=user_in.email)
     if user:
         raise HTTPException(
@@ -138,11 +141,12 @@ def update_user(
     db: Session = Depends(deps.get_db),
     user_id: int,
     user_in: schemas.UserUpdate,
-    current_user: models.User = Depends(deps.get_current_active_superuser),
+    current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Update a user.
     """
+    check_permissions(current_user, ['user.update'])
     user = repositories.user.get(db, id=user_id)
     if not user:
         raise HTTPException(

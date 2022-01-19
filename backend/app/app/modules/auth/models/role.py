@@ -3,6 +3,12 @@ from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .role import User  # noqa
+    from .permission import Permission  # noqa
+
 
 class RolePermissions(Base):
     permission_id = Column(Integer, ForeignKey('permission.id'), primary_key=True)
@@ -10,7 +16,11 @@ class RolePermissions(Base):
 
 
 class UserRoles(Base):
-    user_id = Column(Integer, ForeignKey('user.id'), primary_key=True)
+    user_id = Column(
+        Integer,
+        ForeignKey('user.id'),
+        primary_key=True
+    )
     role_id = Column(Integer, ForeignKey('role.id'), primary_key=True)
 
 
@@ -20,11 +30,11 @@ class Role(Base):
     description = Column(String)
     permissions = relationship(
         "Permission",
-        secondary=RolePermissions,
-        backref="roles"
+        secondary="rolepermissions",
+        back_populates="roles"
     )
     users = relationship(
         "User",
-        secondary=UserRoles,
-        backref="roles"
+        secondary="userroles",
+        back_populates="roles"
     )

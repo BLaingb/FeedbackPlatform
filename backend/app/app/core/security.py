@@ -44,6 +44,6 @@ def check_permissions(user: User, permissions: List[str]):
     for required_permission in permissions:
         if required_permission not in user_permissions:
             raise HTTPException(
-                status_code=401,
+                status_code=403,
                 detail="Insufficient Permissions"
             )

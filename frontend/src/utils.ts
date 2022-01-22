@@ -1,5 +1,5 @@
 import jwt_decode from 'jwt-decode';
-import { IJWTData } from './interfaces';
+import { IJWTData } from './interfaces/auth';
 
 export const getLocalToken = () => localStorage.getItem('token');
 

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { apiUrl } from '@/env';
-import { IUserProfile, IUserProfileUpdate, IUserProfileCreate } from './interfaces';
+import { IUserProfile, IUserProfileUpdate, IUserProfileCreate, IRole } from './interfaces/auth';
 
 function authHeaders(token: string) {
   return {
@@ -41,5 +41,8 @@ export const api = {
       new_password: password,
       token,
     });
+  },
+  async getRoles(token: string) {
+    return axios.get<IRole[]>(`${apiUrl}/api/v1/roles/`, authHeaders(token));
   },
 };

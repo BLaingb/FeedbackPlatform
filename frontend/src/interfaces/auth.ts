@@ -20,6 +20,7 @@ export interface IUserProfileCreate {
     password?: string;
     is_active?: boolean;
     is_superuser?: boolean;
+    role_id?: number;
 }
 
 export interface IJWTData {
@@ -27,4 +28,10 @@ export interface IJWTData {
     sub: number;
     permissions: string[];
     superuser: boolean;
+}
+
+export interface IRole {
+    id: number;
+    name: string;
+    description: string;
 }

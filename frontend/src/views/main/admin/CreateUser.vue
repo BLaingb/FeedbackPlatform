@@ -9,9 +9,20 @@
           <v-form v-model="valid" ref="form" lazy-validation>
             <v-text-field label="Full Name" v-model="fullName" required></v-text-field>
             <v-text-field label="E-mail" type="email" v-model="email" v-validate="'required|email'" data-vv-name="email" :error-messages="errors.collect('email')" required></v-text-field>
-            <div class="subheading secondary--text text--lighten-2">User is superuser <span v-if="isSuperuser">(currently is a superuser)</span><span v-else>(currently is not a superuser)</span></div>
+            <v-select
+              v-model="role"
+              :hint="`${role.description}`"
+              :items="roles"
+              item-text="name"
+              item-value="id"
+              label="Role"
+              persistent-hint
+              return-object
+              single-line
+              required
+
+            ></v-select>
             <v-checkbox label="Is Superuser" v-model="isSuperuser"></v-checkbox>
-            <div class="subheading secondary--text text--lighten-2">User is active <span v-if="isActive">(currently active)</span><span v-else>(currently not active)</span></div>
             <v-checkbox label="Is Active" v-model="isActive"></v-checkbox>
             <v-layout align-center>
               <v-flex>
@@ -39,11 +50,11 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import {
-  IUserProfile,
-  IUserProfileUpdate,
+  IRole,
   IUserProfileCreate,
-} from '@/interfaces';
-import { dispatchGetUsers, dispatchCreateUser } from '@/store/admin/actions';
+} from '@/interfaces/auth';
+import { dispatchGetUsers, dispatchCreateUser, dispatchGetRoles } from '@/store/admin/actions';
+import { readAdminRoles } from '@/store/admin/getters';
 
 @Component
 export default class CreateUser extends Vue {
@@ -55,9 +66,12 @@ export default class CreateUser extends Vue {
   public setPassword = false;
   public password1: string = '';
   public password2: string = '';
+  public role: IRole = { id: 0, name: '', description: ''};
 
   public async mounted() {
-    await dispatchGetUsers(this.$store);
+    const getUsers = dispatchGetUsers(this.$store);
+    const getRoles = dispatchGetRoles(this.$store);
+    await Promise.all([getUsers, getRoles]);
     this.reset();
   }
 
@@ -68,6 +82,7 @@ export default class CreateUser extends Vue {
     this.email = '';
     this.isActive = true;
     this.isSuperuser = false;
+    this.role = this.roles.length ? this.roles[0] : { id: 0, name: '', description: ''};
     this.$validator.reset();
   }
 
@@ -79,19 +94,20 @@ export default class CreateUser extends Vue {
     if (await this.$validator.validateAll()) {
       const updatedProfile: IUserProfileCreate = {
         email: this.email,
+        full_name: this.fullName,
+        is_active: this.isActive,
+        is_superuser: this.isSuperuser,
+        password: this.password1,
+        role_id: this.role?.id,
       };
-      if (this.fullName) {
-        updatedProfile.full_name = this.fullName;
-      }
-      if (this.email) {
-        updatedProfile.email = this.email;
-      }
-      updatedProfile.is_active = this.isActive;
-      updatedProfile.is_superuser = this.isSuperuser;
-      updatedProfile.password = this.password1;
+      console.log(updatedProfile)
       await dispatchCreateUser(this.$store, updatedProfile);
       this.$router.push('/main/admin/users');
     }
+  }
+
+  get roles() {
+    return readAdminRoles(this.$store);
   }
 }
 </script>

@@ -1,5 +1,5 @@
 from typing import List
-from sqlalchemy import Boolean, Column, Integer, String
+from sqlalchemy import Boolean, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base
@@ -18,6 +18,10 @@ class User(Base):
     is_superuser = Column(Boolean(), default=False)
 
     roles = relationship("Role", secondary="userroles", back_populates="users")
+
+    # Relationship to 'chapters' module
+    chapter_id = Column(Integer, ForeignKey('chapter.id'))
+    chapter = relationship("Chapter", back_populates="members")
 
     def get_permissions(self) -> List[str]:
         roles_perms = [r.permissions for r in self.roles]

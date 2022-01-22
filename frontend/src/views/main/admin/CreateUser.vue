@@ -100,7 +100,6 @@ export default class CreateUser extends Vue {
         password: this.password1,
         role_id: this.role?.id,
       };
-      console.log(updatedProfile)
       await dispatchCreateUser(this.$store, updatedProfile);
       this.$router.push('/main/admin/users');
     }

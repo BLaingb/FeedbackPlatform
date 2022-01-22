@@ -38,9 +38,9 @@
           </v-list-tile>
         </v-list>
         <v-divider></v-divider>
-        <v-list subheader v-show="hasAdminAccess">
+        <v-list subheader v-show="isAllowed('user.list')">
           <v-subheader>Admin</v-subheader>
-          <v-list-tile to="/main/admin/users/all">
+          <v-list-tile to="/main/admin/users/all" v-show="isAllowed('user.list')">
             <v-list-tile-action>
               <v-icon>group</v-icon>
             </v-list-tile-action>
@@ -48,7 +48,7 @@
               <v-list-tile-title>Manage Users</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
-          <v-list-tile to="/main/admin/users/create">
+          <v-list-tile to="/main/admin/users/create" v-show="isAllowed('user.create')">
             <v-list-tile-action>
               <v-icon>person_add</v-icon>
             </v-list-tile-action>
@@ -121,9 +121,10 @@
 import { Vue, Component } from 'vue-property-decorator';
 
 import { appName } from '@/env';
-import { readDashboardMiniDrawer, readDashboardShowDrawer, readHasAdminAccess } from '@/store/main/getters';
+import { readDashboardMiniDrawer, readDashboardShowDrawer, readToken } from '@/store/main/getters';
 import { commitSetDashboardShowDrawer, commitSetDashboardMiniDrawer } from '@/store/main/mutations';
 import { dispatchUserLogOut } from '@/store/main/actions';
+import { hasPermission } from '@/utils';
 
 const routeGuardMain = async (to, from, next) => {
   if (to.path === '/main') {
@@ -171,8 +172,8 @@ export default class Main extends Vue {
     );
   }
 
-  public get hasAdminAccess() {
-    return readHasAdminAccess(this.$store);
+  public isAllowed(permission: string) {
+    return hasPermission(readToken(this.$store), permission);
   }
 
   public async logout() {

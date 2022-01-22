@@ -14,7 +14,7 @@
         <td>{{ props.item.full_name }}</td>
         <td><v-icon v-if="props.item.is_active">checkmark</v-icon></td>
         <td><v-icon v-if="props.item.is_superuser">checkmark</v-icon></td>
-        <td class="justify-center layout px-0">
+        <td class="justify-center layout px-0" v-show="isAllowed('user.edit')">
           <v-tooltip top>
             <span>Edit</span>
             <v-btn slot="activator" flat :to="{name: 'main-admin-users-edit', params: {id: props.item.id}}">
@@ -29,10 +29,10 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { Store } from 'vuex';
-import { IUserProfile } from '@/interfaces';
 import { readAdminUsers } from '@/store/admin/getters';
 import { dispatchGetUsers } from '@/store/admin/actions';
+import { hasPermission } from '@/utils';
+import { readToken } from '@/store/main/getters';
 
 @Component
 export default class AdminUsers extends Vue {
@@ -78,6 +78,10 @@ export default class AdminUsers extends Vue {
 
   public async mounted() {
     await dispatchGetUsers(this.$store);
+  }
+
+  public isAllowed(permission: string) {
+    return hasPermission(readToken(this.$store), permission);
   }
 }
 </script>

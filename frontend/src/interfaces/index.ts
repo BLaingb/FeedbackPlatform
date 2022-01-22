@@ -21,3 +21,10 @@ export interface IUserProfileCreate {
     is_active?: boolean;
     is_superuser?: boolean;
 }
+
+export interface IJWTData {
+    exp: number;
+    sub: number;
+    permissions: string[];
+    superuser: boolean;
+}

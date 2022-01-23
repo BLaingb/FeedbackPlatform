@@ -7,6 +7,7 @@ from app.db.base_class import Base
 
 from .role import Role, UserRoles  # noqa
 from .permission import Permission  # noqa
+from app.modules.chapters.models import Chapter # noqa
 
 
 class User(Base):
@@ -21,7 +22,11 @@ class User(Base):
 
     # Relationship to 'chapters' module
     chapter_id = Column(Integer, ForeignKey('chapter.id'))
-    chapter = relationship("Chapter", back_populates="members")
+    chapter = relationship(
+        "Chapter",
+        back_populates="members",
+        foreign_keys="User.chapter_id"
+    )
 
     def get_permissions(self) -> List[str]:
         roles_perms = [r.permissions for r in self.roles]

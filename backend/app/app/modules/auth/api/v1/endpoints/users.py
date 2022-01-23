@@ -9,6 +9,7 @@ from app.api import deps
 from app.core.config import settings
 from app.core.security import check_permissions
 from app.modules.auth import models, schemas, repositories
+from app.modules.chapters import repositories as chapters_repositories
 from app.utils import send_new_account_email
 
 router = APIRouter()
@@ -46,12 +47,21 @@ def create_user(
             status_code=400,
             detail="The user with this username already exists in the system.",
         )
+
     role = repositories.role.get(db, user_in.role_id)
     if not role:
         raise HTTPException(
             status_code=400,
             detail="The provided role id does not exist in the system."
         )
+
+    chapter = chapters_repositories.chapter.get(db, user_in.chapter_id)
+    if not chapter:
+        raise HTTPException(
+            status_code=400,
+            detail="The provided chapter id does not exist in the system."
+        )
+
     user = repositories.user.create(db, obj_in=user_in, role=role)
     if settings.EMAILS_ENABLED and user_in.email:
         send_new_account_email(

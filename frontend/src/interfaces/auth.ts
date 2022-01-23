@@ -1,9 +1,12 @@
+import { IChapter } from './chapters';
+
 export interface IUserProfile {
     email: string;
     is_active: boolean;
     is_superuser: boolean;
     full_name: string;
     id: number;
+    chapter: IChapter;
 }
 
 export interface IUserProfileUpdate {

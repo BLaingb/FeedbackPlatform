@@ -9,9 +9,9 @@
     </v-toolbar>
     <v-data-table :headers="headers" :items="users">
       <template slot="items" slot-scope="props">
-        <td>{{ props.item.name }}</td>
-        <td>{{ props.item.email }}</td>
         <td>{{ props.item.full_name }}</td>
+        <td>{{ props.item.email }}</td>
+        <td>{{ props.item.chapter.name }}</td>
         <td><v-icon v-if="props.item.is_active">checkmark</v-icon></td>
         <td><v-icon v-if="props.item.is_superuser">checkmark</v-icon></td>
         <td class="justify-center layout px-0" v-show="isAllowed('user.edit')">
@@ -38,9 +38,9 @@ import { readToken } from '@/store/main/getters';
 export default class AdminUsers extends Vue {
   public headers = [
     {
-      text: 'Name',
+      text: 'Full Name',
       sortable: true,
-      value: 'name',
+      value: 'full_name',
       align: 'left',
     },
     {
@@ -50,9 +50,9 @@ export default class AdminUsers extends Vue {
       align: 'left',
     },
     {
-      text: 'Full Name',
+      text: 'Chapter',
       sortable: true,
-      value: 'full_name',
+      value: 'chapter.name',
       align: 'left',
     },
     {

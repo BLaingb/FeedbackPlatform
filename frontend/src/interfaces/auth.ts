@@ -21,6 +21,7 @@ export interface IUserProfileCreate {
     is_active?: boolean;
     is_superuser?: boolean;
     role_id?: number;
+    chapter_id?: number;
 }
 
 export interface IJWTData {

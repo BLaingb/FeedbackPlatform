@@ -4,7 +4,7 @@ import { IUserProfileCreate, IUserProfileUpdate } from '@/interfaces/auth';
 import { State } from '../state';
 import { AdminState } from './state';
 import { getStoreAccessors } from 'typesafe-vuex';
-import { commitSetUsers, commitSetUser, commitSetRoles } from './mutations';
+import { commitSetUsers, commitSetUser, commitSetRoles, commitSetChapters } from './mutations';
 import { dispatchCheckApiError } from '../main/actions';
 import { commitAddNotification, commitRemoveNotification } from '../main/mutations';
 import { AxiosError } from 'axios';
@@ -62,6 +62,16 @@ export const actions = {
             await dispatchCheckApiError(context, error as AxiosError);
         }
     },
+    async actionGetChapters(context: MainContext) {
+        try {
+            const response = await api.getChapters(context.rootState.main.token);
+            if (response) {
+                commitSetChapters(context, response.data);
+            }
+        } catch (error) {
+            await dispatchCheckApiError(context, error as AxiosError);
+        }
+    },
 };
 
 const { dispatch } = getStoreAccessors<AdminState, State>('');
@@ -70,3 +80,4 @@ export const dispatchCreateUser = dispatch(actions.actionCreateUser);
 export const dispatchGetUsers = dispatch(actions.actionGetUsers);
 export const dispatchUpdateUser = dispatch(actions.actionUpdateUser);
 export const dispatchGetRoles = dispatch(actions.actionGetRoles);
+export const dispatchGetChapters = dispatch(actions.actionGetChapters);

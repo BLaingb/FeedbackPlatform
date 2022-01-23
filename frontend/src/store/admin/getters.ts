@@ -11,6 +11,7 @@ export const getters = {
         }
     },
     adminRoles: (state: AdminState) => state.roles,
+    adminChapters: (state: AdminState) => state.chapters,
 };
 
 const { read } = getStoreAccessors<AdminState, State>('');
@@ -18,3 +19,4 @@ const { read } = getStoreAccessors<AdminState, State>('');
 export const readAdminOneUser = read(getters.adminOneUser);
 export const readAdminUsers = read(getters.adminUsers);
 export const readAdminRoles = read(getters.adminRoles);
+export const readAdminChapters = read(getters.adminChapters);

@@ -1,6 +1,7 @@
 from typing import Optional
 
 from pydantic import BaseModel, EmailStr
+from app.modules.auth.schemas.dependencies import AuthChapter
 
 
 # Shared properties
@@ -25,6 +26,7 @@ class UserUpdate(UserBase):
 
 class UserInDBBase(UserBase):
     id: Optional[int] = None
+    chapter_id: Optional[int] = None
 
     class Config:
         orm_mode = True
@@ -32,7 +34,7 @@ class UserInDBBase(UserBase):
 
 # Additional properties to return via API
 class User(UserInDBBase):
-    pass
+    chapter: Optional[AuthChapter]
 
 
 # Additional properties stored in DB

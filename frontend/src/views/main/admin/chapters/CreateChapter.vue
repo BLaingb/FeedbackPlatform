@@ -68,8 +68,8 @@ export default class CreateChapter extends Vue {
         name: this.name,
         chapter_lead_id: this.chapterLead!.id!,
       };
-      await dispatchCreateChapter(this.$store, chapterData);
-      this.$router.push('/main/admin/chapters');
+      const success = await dispatchCreateChapter(this.$store, chapterData);
+      if (success) { return this.$router.push('/main/admin/chapters'); }
     }
   }
 

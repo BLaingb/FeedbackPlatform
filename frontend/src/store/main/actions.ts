@@ -1,6 +1,7 @@
 import { api } from '@/api';
+import { IDataError } from '@/interfaces/common';
 import router from '@/router';
-import { getLocalToken, removeLocalToken, saveLocalToken } from '@/utils';
+import { getLocalToken, processFormErrorMsg, removeLocalToken, saveLocalToken } from '@/utils';
 import { AxiosError } from 'axios';
 import { getStoreAccessors } from 'typesafe-vuex';
 import { ActionContext } from 'vuex';
@@ -107,6 +108,11 @@ export const actions = {
     async actionCheckApiError(context: MainContext, payload: AxiosError) {
         if (payload.response!.status === 401) {
             await dispatchLogOut(context);
+        } else if (payload.response!.status > 401 && payload.response!.status < 500) {
+            payload.response!.data!.detail.forEach((error: IDataError) => {
+                const message = processFormErrorMsg(error);
+                commitAddNotification(context, { content: message, color: 'error' });
+            });
         }
     },
     actionRouteLoggedIn(context: MainContext) {

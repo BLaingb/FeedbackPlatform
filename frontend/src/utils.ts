@@ -1,5 +1,6 @@
 import jwt_decode from 'jwt-decode';
 import { IJWTData } from './interfaces/auth';
+import { IDataError } from './interfaces/common';
 
 export const getLocalToken = () => localStorage.getItem('token');
 
@@ -19,4 +20,9 @@ export const hasPermission = (token: string, permission: string) => {
       removeLocalToken();
       return false;
   }
+};
+
+export const processFormErrorMsg = (data: IDataError) => {
+  const field = data.loc[data.loc.length - 1];
+  return `Error in ${field}: ${data.msg}`;
 };

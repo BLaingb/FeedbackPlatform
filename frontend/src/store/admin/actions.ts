@@ -39,8 +39,8 @@ export const actions = {
         }
     },
     async actionCreateUser(context: MainContext, payload: IUserProfileCreate) {
+        const loadingNotification = { content: 'saving', showProgress: true };
         try {
-            const loadingNotification = { content: 'saving', showProgress: true };
             commitAddNotification(context, loadingNotification);
             const response = (await Promise.all([
                 api.createUser(context.rootState.main.token, payload),
@@ -50,6 +50,7 @@ export const actions = {
             commitRemoveNotification(context, loadingNotification);
             commitAddNotification(context, { content: 'User successfully created', color: 'success' });
         } catch (error) {
+            commitRemoveNotification(context, loadingNotification);
             await dispatchCheckApiError(context, error as AxiosError);
         }
     },
@@ -74,18 +75,20 @@ export const actions = {
         }
     },
     async actionCreateChapter(context: MainContext, payload: IChapterCreate) {
+        const loadingNotification = { content: 'saving', showProgress: true };
         try {
-            const loadingNotification = { content: 'saving', showProgress: true };
             commitAddNotification(context, loadingNotification);
             const response = (await Promise.all([
                 api.createChapter(context.rootState.main.token, payload),
                 await new Promise<void>((resolve, reject) => setTimeout(() => resolve(), 500)),
             ]))[0];
             commitAddChapter(context, response.data);
-            commitRemoveNotification(context, loadingNotification);
             commitAddNotification(context, { content: 'Chapter successfully created', color: 'success' });
+            return true;
         } catch (error) {
+            commitRemoveNotification(context, loadingNotification);
             await dispatchCheckApiError(context, error as AxiosError);
+            return false;
         }
     },
 };

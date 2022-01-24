@@ -1,5 +1,5 @@
 from typing import List, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from app.modules.chapters.schemas.dependencies import ChapterUser
 
@@ -9,7 +9,7 @@ class ChapterBase(BaseModel):
 
 
 class ChapterCreate(ChapterBase):
-    name: str
+    name: str = Field(..., min_length=2)
     chapter_lead_id: int
 
 

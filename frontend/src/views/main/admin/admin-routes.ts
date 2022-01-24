@@ -1,0 +1,28 @@
+export const adminRoutes = [
+  {
+    path: 'users',
+    redirect: 'users/all',
+  },
+  {
+    path: 'users/all',
+    component: () =>
+      import(/* webpackChunkName: "main-admin-users" */ './AdminUsers.vue'),
+  },
+  {
+    path: 'users/edit/:id',
+    name: 'main-admin-users-edit',
+    component: () =>
+      import(/* webpackChunkName: "main-admin-users-edit" */ './EditUser.vue'),
+  },
+  {
+    path: 'users/create',
+    name: 'main-admin-users-create',
+    component: () =>
+      import(/* webpackChunkName: "main-admin-users-create" */ './CreateUser.vue'),
+  },
+  {
+    path: 'chapters/all',
+    component: () =>
+      import(/* webpackChunkName: "main-admin-chapters" */ './chapters/AdminChapters.vue'),
+  },
+];

@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import RouterComponent from './components/RouterComponent.vue';
+import { adminRoutes } from './views/main/admin/admin-routes';
 
 Vue.use(Router);
 
@@ -62,29 +63,7 @@ export default new Router({
               path: 'admin',
               component: () => import(/* webpackChunkName: "main-admin" */ './views/main/admin/Admin.vue'),
               redirect: 'admin/users/all',
-              children: [
-                {
-                  path: 'users',
-                  redirect: 'users/all',
-                },
-                {
-                  path: 'users/all',
-                  component: () => import(
-                    /* webpackChunkName: "main-admin-users" */ './views/main/admin/AdminUsers.vue'),
-                },
-                {
-                  path: 'users/edit/:id',
-                  name: 'main-admin-users-edit',
-                  component: () => import(
-                    /* webpackChunkName: "main-admin-users-edit" */ './views/main/admin/EditUser.vue'),
-                },
-                {
-                  path: 'users/create',
-                  name: 'main-admin-users-create',
-                  component: () => import(
-                    /* webpackChunkName: "main-admin-users-create" */ './views/main/admin/CreateUser.vue'),
-                },
-              ],
+              children: adminRoutes,
             },
           ],
         },

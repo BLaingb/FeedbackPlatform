@@ -1,13 +1,14 @@
 import { api } from '@/api';
-import { ActionContext } from 'vuex';
 import { IUserProfileCreate, IUserProfileUpdate } from '@/interfaces/auth';
-import { State } from '../state';
-import { AdminState } from './state';
+import { IChapterCreate } from '@/interfaces/chapters';
+import { AxiosError } from 'axios';
 import { getStoreAccessors } from 'typesafe-vuex';
-import { commitSetUsers, commitSetUser, commitSetRoles, commitSetChapters } from './mutations';
+import { ActionContext } from 'vuex';
 import { dispatchCheckApiError } from '../main/actions';
 import { commitAddNotification, commitRemoveNotification } from '../main/mutations';
-import { AxiosError } from 'axios';
+import { State } from '../state';
+import { commitAddChapter, commitSetChapters, commitSetRoles, commitSetUser, commitSetUsers } from './mutations';
+import { AdminState } from './state';
 
 type MainContext = ActionContext<AdminState, State>;
 
@@ -72,6 +73,21 @@ export const actions = {
             await dispatchCheckApiError(context, error as AxiosError);
         }
     },
+    async actionCreateChapter(context: MainContext, payload: IChapterCreate) {
+        try {
+            const loadingNotification = { content: 'saving', showProgress: true };
+            commitAddNotification(context, loadingNotification);
+            const response = (await Promise.all([
+                api.createChapter(context.rootState.main.token, payload),
+                await new Promise<void>((resolve, reject) => setTimeout(() => resolve(), 500)),
+            ]))[0];
+            commitAddChapter(context, response.data);
+            commitRemoveNotification(context, loadingNotification);
+            commitAddNotification(context, { content: 'Chapter successfully created', color: 'success' });
+        } catch (error) {
+            await dispatchCheckApiError(context, error as AxiosError);
+        }
+    },
 };
 
 const { dispatch } = getStoreAccessors<AdminState, State>('');
@@ -81,3 +97,4 @@ export const dispatchGetUsers = dispatch(actions.actionGetUsers);
 export const dispatchUpdateUser = dispatch(actions.actionUpdateUser);
 export const dispatchGetRoles = dispatch(actions.actionGetRoles);
 export const dispatchGetChapters = dispatch(actions.actionGetChapters);
+export const dispatchCreateChapter = dispatch(actions.actionCreateChapter);

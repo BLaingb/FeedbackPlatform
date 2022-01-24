@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { apiUrl } from '@/env';
 import { IUserProfile, IUserProfileUpdate, IUserProfileCreate, IRole } from './interfaces/auth';
-import { IChapter } from './interfaces/chapters';
+import { IChapter, IChapterCreate } from './interfaces/chapters';
 
 function authHeaders(token: string) {
   return {
@@ -48,5 +48,8 @@ export const api = {
   },
   async getChapters(token: string) {
     return axios.get<IChapter[]>(`${apiUrl}/api/v1/chapters/`, authHeaders(token));
+  },
+  async createChapter(token: string, data: IChapterCreate) {
+    return axios.post<IChapter>(`${apiUrl}/api/v1/chapters/`, data, authHeaders(token));
   },
 };

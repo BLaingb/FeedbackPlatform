@@ -21,8 +21,17 @@ export const adminRoutes = [
       import(/* webpackChunkName: "main-admin-users-create" */ './users/CreateUser.vue'),
   },
   {
+    path: 'chapters',
+    redirect: 'chapters/all',
+  },
+  {
     path: 'chapters/all',
     component: () =>
       import(/* webpackChunkName: "main-admin-chapters" */ './chapters/AdminChapters.vue'),
+  },
+  {
+    path: 'chapters/create',
+    component: () =>
+      import(/* webpackChunkName: "main-admin-chapters" */ './chapters/CreateChapter.vue'),
   },
 ];

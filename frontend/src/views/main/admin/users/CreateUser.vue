@@ -96,7 +96,7 @@ import {
   dispatchGetChapters,
 } from '@/store/admin/actions';
 import { readAdminChapters, readAdminRoles } from '@/store/admin/getters';
-import { IChapter, IChapterUser } from '@/interfaces/chapters';
+import { IChapter } from '@/interfaces/chapters';
 
 @Component
 export default class CreateUser extends Vue {

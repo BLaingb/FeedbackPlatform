@@ -44,7 +44,7 @@ import { hasPermission } from '@/utils';
 import { readToken } from '@/store/main/getters';
 
 @Component
-export default class AdminUsers extends Vue {
+export default class AdminChapters extends Vue {
   public headers = [
     {
       text: 'Name',

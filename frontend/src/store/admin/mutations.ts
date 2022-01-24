@@ -19,6 +19,11 @@ export const mutations = {
     setChapters(state: AdminState, payload: IChapter[]) {
         state.chapters = payload;
     },
+    addChapter(state: AdminState, payload: IChapter) {
+        const chapters = state.chapters.filter((chapter: IChapter) => chapter.id !== payload.id);
+        chapters.push(payload);
+        state.chapters = chapters;
+    },
 };
 
 const { commit } = getStoreAccessors<AdminState, State>('');
@@ -27,3 +32,4 @@ export const commitSetUser = commit(mutations.setUser);
 export const commitSetUsers = commit(mutations.setUsers);
 export const commitSetRoles = commit(mutations.setRoles);
 export const commitSetChapters = commit(mutations.setChapters);
+export const commitAddChapter = commit(mutations.addChapter);

@@ -6,19 +6,19 @@ export const adminRoutes = [
   {
     path: 'users/all',
     component: () =>
-      import(/* webpackChunkName: "main-admin-users" */ './AdminUsers.vue'),
+      import(/* webpackChunkName: "main-admin-users" */ './users/AdminUsers.vue'),
   },
   {
     path: 'users/edit/:id',
     name: 'main-admin-users-edit',
     component: () =>
-      import(/* webpackChunkName: "main-admin-users-edit" */ './EditUser.vue'),
+      import(/* webpackChunkName: "main-admin-users-edit" */ './users/EditUser.vue'),
   },
   {
     path: 'users/create',
     name: 'main-admin-users-create',
     component: () =>
-      import(/* webpackChunkName: "main-admin-users-create" */ './CreateUser.vue'),
+      import(/* webpackChunkName: "main-admin-users-create" */ './users/CreateUser.vue'),
   },
   {
     path: 'chapters/all',

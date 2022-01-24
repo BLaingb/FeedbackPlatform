@@ -45,15 +45,7 @@
               <v-icon>group</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
-              <v-list-tile-title>Manage Users</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-          <v-list-tile to="/main/admin/users/create" v-show="isAllowed('user.create')">
-            <v-list-tile-action>
-              <v-icon>person_add</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>Create User</v-list-tile-title>
+              <v-list-tile-title>Users</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
           <v-list-tile to="/main/admin/chapters/all" v-show="isAllowed('chapter.list')">
@@ -61,7 +53,7 @@
               <v-icon>domain</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
-              <v-list-tile-title>Manage Chapters</v-list-tile-title>
+              <v-list-tile-title>Chapters</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
         </v-list>
